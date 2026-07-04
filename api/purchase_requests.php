@@ -14,6 +14,80 @@ try {
 } catch (Exception $e) {
     $purchases = [];
 }
+
+// Fallback: sample purchase requests if database is empty
+if (empty($purchases)) {
+    $purchases = [
+        [
+            'id' => 'REQ-001',
+            'timestamp' => '2026-07-04 10:30:00',
+            'product_id' => '03',
+            'product_name' => 'DESIGN 03',
+            'items' => json_encode([
+                ['price' => 'HIGH NECK TOP (Rp 1.380.000) - RC/T-003'],
+                ['price' => 'BAGGY JEANS (Rp 1.920.000) - RC/P-002']
+            ]),
+            'customer' => json_encode([
+                'name' => 'Alex Rivera',
+                'email' => 'alex.rivera@email.com',
+                'phone' => '+62 811 2233 4455',
+                'notes' => 'I am 175cm tall. Please ensure the jeans have a relaxed fit. Would love expedited shipping if possible.'
+            ]),
+            'status' => 'Pending'
+        ],
+        [
+            'id' => 'REQ-002',
+            'timestamp' => '2026-07-03 21:42:18',
+            'product_id' => '05',
+            'product_name' => 'DESIGN 05',
+            'items' => json_encode([
+                ['price' => 'DOUBLE VEST (Rp 1.010.000) - RC/T-001'],
+                ['price' => 'BAGGY JEANS (Rp 1.670.000) - RC/P-001']
+            ]),
+            'customer' => json_encode([
+                'name' => 'Natasha L.',
+                'email' => 'natasha.l@studio.com',
+                'phone' => '+44 7911 123456',
+                'notes' => 'Rush order please — I need this before July 15th for a fashion event. Willing to pay extra for shipping.'
+            ]),
+            'status' => 'Pending'
+        ],
+        [
+            'id' => 'REQ-003',
+            'timestamp' => '2026-07-03 14:30:05',
+            'product_id' => '02',
+            'product_name' => 'DESIGN 02',
+            'items' => json_encode([
+                ['price' => 'OFF SHOULDER TOP (Rp 1.275.000) - RC/T-002'],
+                ['price' => 'RUFFLE SKIRT (Rp 915.000) - RC/S-001']
+            ]),
+            'customer' => json_encode([
+                'name' => 'Aria Stark',
+                'email' => 'aria.s@example.com',
+                'phone' => '+65 9123 4567',
+                'notes' => ''
+            ]),
+            'status' => 'Accepted'
+        ],
+        [
+            'id' => 'REQ-004',
+            'timestamp' => '2026-07-03 09:15:22',
+            'product_id' => '01',
+            'product_name' => 'DESIGN 01',
+            'items' => json_encode([
+                ['price' => 'HIGH NECK TOP (Rp 1.245.000) - RC/T-005'],
+                ['price' => 'BAGGY JEANS (Rp 1.890.000) - RC/P-003']
+            ]),
+            'customer' => json_encode([
+                'name' => 'Jane Doe',
+                'email' => 'janedoe@example.com',
+                'phone' => '+62 812 3456 7890',
+                'notes' => 'I am 170cm tall, please make sure the pants are long enough to cover the ankles. Thank you!'
+            ]),
+            'status' => 'Declined'
+        ]
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
