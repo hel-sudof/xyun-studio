@@ -27,8 +27,10 @@ if (!function_exists('is_active')) {
     
     <a href="profile.php" class="<?php echo is_active('profile.php'); ?>">PROFILE</a>
     
-    <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
-      <a href="purchase_requests.php" class="<?php echo is_active('purchase_requests.php'); ?>">REQUESTS</a>
+    <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+      <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+        <a href="purchase_requests.php" class="<?php echo is_active('purchase_requests.php'); ?>">REQUESTS</a>
+      <?php endif; ?>
       <a href="logout.php">LOGOUT</a>
     <?php else: ?>
       <a href="login.php" class="<?php echo is_active('login.php'); ?>">LOGIN</a>
