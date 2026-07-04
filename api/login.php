@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/auth.php';
-
-// Prevent Vercel edge caching
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Pragma: no-cache');
+setNoCacheHeaders();
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

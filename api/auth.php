@@ -4,13 +4,17 @@
  * Works on both localhost and Vercel serverless
  */
 
-// Prevent Vercel from caching pages dynamically rendered based on user auth state
-header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
-
 define('AUTH_COOKIE_NAME', 'xyun_auth');
 define('AUTH_SECRET', 'xyun_studio_2026_secret_key');
+
+/**
+ * Set no-cache headers (call from top of files before any output)
+ */
+function setNoCacheHeaders() {
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Cache-Control: post-check=0, pre-check=0', false);
+    header('Pragma: no-cache');
+}
 
 function setAuthCookie($username, $isAdmin) {
     $data = json_encode([

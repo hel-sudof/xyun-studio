@@ -636,10 +636,9 @@ $product = $products[$id];
           $idNum = (int)$id;
           for($i=1; $i<=4; $i++): 
             $imgFile = "bg/sub{$idNum}cat{$i}.png";
-            $fallbackFile = "bg/sub1cat{$i}.png";
           ?>
             <div class="dynamic-box">
-              <img src="<?php echo $imgFile; ?>" onerror="this.onerror=null; this.src='<?php echo $fallbackFile; ?>';" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
+              <img src="<?php echo $imgFile; ?>" alt="Design <?php echo $id; ?> catalogue" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
             </div>
           <?php endfor; ?>
         </div>
@@ -649,10 +648,9 @@ $product = $products[$id];
           <?php 
           for($i=1; $i<=6; $i++): 
             $imgFile = "bg/sub{$idNum}det{$i}.png";
-            $fallbackFile = "bg/sub1det{$i}.png";
           ?>
             <div class="dynamic-box">
-              <img src="<?php echo $imgFile; ?>" onerror="this.onerror=null; this.src='<?php echo $fallbackFile; ?>';" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
+              <img src="<?php echo $imgFile; ?>" alt="Design <?php echo $id; ?> detail" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
             </div>
           <?php endfor; ?>
         </div>
