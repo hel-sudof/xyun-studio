@@ -20,12 +20,8 @@ function setAuthCookie($username, $isAdmin) {
         'exp' => time() + (60 * 60 * 24 * 7) // 7 days
     ]);
     $token = base64_encode($data) . '.' . hash_hmac('sha256', $data, AUTH_SECRET);
-    setcookie(AUTH_COOKIE_NAME, $token, [
-        'expires' => time() + (60 * 60 * 24 * 7),
-        'path' => '/',
-        'httponly' => true,
-        'samesite' => 'Lax'
-    ]);
+    $cookieStr = AUTH_COOKIE_NAME . "=" . urlencode($token) . "; Path=/; Max-Age=604800; HttpOnly; SameSite=Lax";
+    header("Set-Cookie: " . $cookieStr, false);
 }
 
 function getAuthUser() {
@@ -56,10 +52,6 @@ function isAdmin() {
 }
 
 function clearAuthCookie() {
-    setcookie(AUTH_COOKIE_NAME, '', [
-        'expires' => time() - 3600,
-        'path' => '/',
-        'httponly' => true,
-        'samesite' => 'Lax'
-    ]);
+    $cookieStr = AUTH_COOKIE_NAME . "=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax";
+    header("Set-Cookie: " . $cookieStr, false);
 }
