@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/auth.php';
 
+// Prevent Vercel edge caching
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
@@ -8,11 +12,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (!empty($username) && !empty($password)) {
-        $isAdmin = ($email === 'elzhelenajonathan@gmail.com');
-        setAuthCookie($username, $isAdmin);
+        $isAdmin = false;
         
-        header('Location: blog.php');
-        exit;
+        if ($email === 'elzhelenajonathan@gmail.com') {
+            if ($password === 'admin123') {
+                $isAdmin = true;
+            } else {
+                $error = 'Invalid admin password.';
+            }
+        }
+        
+        if (!$error) {
+            setAuthCookie($username, $isAdmin);
+            header('Location: blog.php');
+            exit;
+        }
     } else {
         $error = 'Username and password are required.';
     }
