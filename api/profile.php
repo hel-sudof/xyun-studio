@@ -255,7 +255,6 @@ require_once __DIR__ . '/auth.php';
 
     <!-- Fixed Bottom Bar Footer -->
     <div class="bottom-bar">
-      <a href="collections.php">COLLECTIONS</a>
       <span class="bottom-bar-decor">RAWCODE A/W 2026</span>
     </div>
     

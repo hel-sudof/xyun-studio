@@ -85,9 +85,8 @@ require_once __DIR__ . '/auth.php';
       <div class="home-overlay"></div>
     </div>
 
-    <!-- Collections button placed in the fixed bottom bar footer -->
+    <!-- Fixed bottom bar footer -->
     <div class="bottom-bar">
-      <a href="collections.php">COLLECTIONS</a>
       <span class="bottom-bar-decor">RAWCODE A/W 2026</span>
     </div>
   </div>

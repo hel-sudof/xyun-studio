@@ -223,26 +223,41 @@ if (empty($blogs)) {
       max-width: 1200px;
       margin: 0 auto;
       padding: 24px 48px 0 48px;
+      position: relative;
+    }
+    .blog-search-wrapper::before {
+      content: "🔍";
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      z-index: 2;
+      opacity: 0.5;
+      pointer-events: none;
     }
     .blog-search-input {
       width: 100%;
-      padding: 14px 20px;
-      background-color: #000;
-      border: 1px solid var(--zinc-800);
+      padding: 16px 20px 16px 48px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--zinc-600);
       color: #fff;
       font-family: var(--font-zalando-sans);
-      font-size: 12px;
+      font-size: 13px;
       letter-spacing: 0.05em;
       outline: none;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, box-shadow 0.3s;
       box-sizing: border-box;
+      backdrop-filter: blur(4px);
     }
     .blog-search-input:focus {
-      border-color: var(--zinc-500);
+      border-color: #ffffff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
     }
     .blog-search-input::placeholder {
-      color: var(--zinc-600);
+      color: var(--zinc-500);
       text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
   </style>
 </head>
@@ -358,9 +373,8 @@ if (empty($blogs)) {
   </script>
   <?php endif; ?>
 
-  <!-- Collections bottom bar -->
+  <!-- Bottom bar -->
   <div class="bottom-bar">
-    <a href="collections.php">COLLECTIONS</a>
     <span class="bottom-bar-decor">RAWCODE A/W 2026</span>
   </div>
 
