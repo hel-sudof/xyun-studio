@@ -28,16 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $date = date('Y-m-d');
         $author = 'xyún admin';
 
-        // Handle file upload if provided
+        // Handle file upload — use base64 data URL (Vercel is read-only)
         if (!empty($_FILES['image_file']['name']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../uploads/';
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-            $ext = pathinfo($_FILES['image_file']['name'], PATHINFO_EXTENSION);
-            $filename = 'blog_' . $id . '.' . $ext;
-            $destPath = $uploadDir . $filename;
-            if (move_uploaded_file($_FILES['image_file']['tmp_name'], $destPath)) {
-                $image = 'uploads/' . $filename;
-            }
+            $imgData = file_get_contents($_FILES['image_file']['tmp_name']);
+            $mime = mime_content_type($_FILES['image_file']['tmp_name']) ?: 'image/jpeg';
+            $image = 'data:' . $mime . ';base64,' . base64_encode($imgData);
         }
 
         try {
@@ -77,16 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $image = $_POST['image'] ?? '';
         $content = $_POST['content'] ?? '';
 
-        // Handle file upload if provided
+        // Handle file upload — use base64 data URL (Vercel is read-only)
         if (!empty($_FILES['image_file']['name']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../uploads/';
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-            $ext = pathinfo($_FILES['image_file']['name'], PATHINFO_EXTENSION);
-            $filename = 'blog_' . $id . '.' . $ext;
-            $destPath = $uploadDir . $filename;
-            if (move_uploaded_file($_FILES['image_file']['tmp_name'], $destPath)) {
-                $image = 'uploads/' . $filename;
-            }
+            $imgData = file_get_contents($_FILES['image_file']['tmp_name']);
+            $mime = mime_content_type($_FILES['image_file']['tmp_name']) ?: 'image/jpeg';
+            $image = 'data:' . $mime . ';base64,' . base64_encode($imgData);
         }
 
         try {
