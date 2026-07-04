@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/db.php';
 
 try {
@@ -236,7 +236,7 @@ try {
     </div>
   </div>
   
-  <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+  <?php if (isAdmin()): ?>
     <!-- Floating Action Button for Admin -->
     <button id="add-blog-btn" class="admin-btn">+</button>
     

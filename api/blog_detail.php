@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/db.php';
 
 $id = $_GET['id'] ?? '';
@@ -275,7 +275,7 @@ if (!$blog) {
       
       <div class="article-content"><?php echo htmlspecialchars($blog['content']); ?></div>
       
-      <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+      <?php if (isAdmin()): ?>
       <!-- Admin Controls -->
       <div class="admin-controls">
         <button id="edit-btn" class="admin-btn-inline">EDIT POST</button>
@@ -290,7 +290,7 @@ if (!$blog) {
     </div>
   </div>
 
-  <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+  <?php if (isAdmin()): ?>
   <!-- Edit Blog Modal -->
   <div id="edit-modal" class="blog-modal">
     <div class="blog-modal-content">

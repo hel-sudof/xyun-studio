@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth.php';
 $id = isset($_GET['id']) ? $_GET['id'] : '03';
 
 $products = [

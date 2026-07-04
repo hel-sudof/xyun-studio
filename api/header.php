@@ -6,6 +6,9 @@ if (!function_exists('is_active')) {
     return ($current_script === $page_name) ? 'active' : '';
   }
 }
+if (!function_exists('isLoggedIn')) {
+  require_once __DIR__ . '/auth.php';
+}
 ?>
 <header class="header-nav">
   <nav>
@@ -27,8 +30,8 @@ if (!function_exists('is_active')) {
     
     <a href="profile.php" class="<?php echo is_active('profile.php'); ?>">PROFILE</a>
     
-    <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-      <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true): ?>
+    <?php if (isLoggedIn()): ?>
+      <?php if (isAdmin()): ?>
         <a href="purchase_requests.php" class="<?php echo is_active('purchase_requests.php'); ?>">REQUESTS</a>
       <?php endif; ?>
       <a href="logout.php">LOGOUT</a>

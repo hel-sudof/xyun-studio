@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth.php';
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
@@ -7,14 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (!empty($username) && !empty($password)) {
-        if ($email === 'elzhelenajonathan@gmail.com') {
-            $_SESSION['is_admin'] = true;
-        } else {
-            $_SESSION['is_admin'] = false;
-        }
-        
-        $_SESSION['logged_in'] = true;
-        $_SESSION['username'] = htmlspecialchars($username);
+        $isAdmin = ($email === 'elzhelenajonathan@gmail.com');
+        setAuthCookie($username, $isAdmin);
         
         header('Location: blog.php');
         exit;

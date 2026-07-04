@@ -1,8 +1,8 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/db.php';
 
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+if (!isAdmin()) {
     header('Location: login.php');
     exit;
 }
