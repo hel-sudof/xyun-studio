@@ -44,6 +44,31 @@ function getDbConnection() {
             if ($sslmode === 'require') {
                 $pdo->exec("SET sslmode = 'require'");
             }
+            
+            // Auto-create tables if they don't exist
+            $pdo->exec("
+                CREATE TABLE IF NOT EXISTS blogs (
+                    id          VARCHAR(64) PRIMARY KEY,
+                    title       TEXT NOT NULL,
+                    image       TEXT DEFAULT '',
+                    content     TEXT DEFAULT '',
+                    date        DATE DEFAULT CURRENT_DATE,
+                    author      VARCHAR(255) DEFAULT 'xyún admin',
+                    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+                CREATE TABLE IF NOT EXISTS purchases (
+                    id           VARCHAR(64) PRIMARY KEY,
+                    timestamp    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    product_id   VARCHAR(64) DEFAULT '',
+                    product_name VARCHAR(255) DEFAULT '',
+                    items        JSONB DEFAULT '[]'::jsonb,
+                    customer     JSONB DEFAULT '{}'::jsonb,
+                    status       VARCHAR(32) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Accepted', 'Declined')),
+                    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            ");
         } catch (PDOException $e) {
             // Log error and return null instead of crashing
             error_log("Database connection failed: " . $e->getMessage());
