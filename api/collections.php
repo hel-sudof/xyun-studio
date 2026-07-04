@@ -314,22 +314,12 @@ require_once __DIR__ . '/auth.php';
       <!-- Search Bar -->
       <div class="col-search-wrapper">
         <div class="col-search-inner">
-          <button id="col-search-trigger" type="button" class="col-search-trigger">
-            <svg class="col-search-trigger-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="col-search-field">
+            <svg class="col-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/>
               <path d="m21 21-4.35-4.35"/>
             </svg>
-            SEARCH COLLECTION...
-          </button>
-          <div id="col-search-input-container" class="col-search-input-container">
-            <div class="col-search-input-field">
-              <svg class="col-search-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input type="text" id="col-search-query-input" class="col-search-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off">
-              <button id="col-search-close-btn" type="button" class="col-search-close">&times;</button>
-            </div>
+            <input type="text" id="col-search-input" class="col-search-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off">
           </div>
           <div id="col-search-results-dropdown" class="col-search-dropdown"></div>
         </div>
@@ -471,39 +461,10 @@ require_once __DIR__ . '/auth.php';
       position: relative;
       width: 100%;
     }
-    .col-search-trigger {
-      width: 100%;
-      padding: 16px 20px 16px 48px;
-      background-color: rgba(0, 0, 0, 0.8);
-      border: 1px solid var(--zinc-600);
-      color: var(--zinc-500);
-      font-family: var(--font-zalando-sans);
-      font-size: 13px;
-      letter-spacing: 0.05em;
-      text-align: left;
-      cursor: pointer;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      backdrop-filter: blur(4px);
+    .col-search-field {
       position: relative;
     }
-    .col-search-trigger:hover {
-      border-color: var(--zinc-400);
-    }
-    .col-search-trigger-icon {
-      position: absolute;
-      left: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      opacity: 0.5;
-      pointer-events: none;
-      color: #fff;
-    }
-    .col-search-input-field {
-      position: relative;
-    }
-    .col-search-input-icon {
+    .col-search-icon {
       position: absolute;
       left: 16px;
       top: 50%;
@@ -513,20 +474,12 @@ require_once __DIR__ . '/auth.php';
       opacity: 0.5;
       pointer-events: none;
       color: #fff;
-      z-index: 22;
-    }
-    .col-search-input-container {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 20;
+      z-index: 2;
     }
     .col-search-input {
       width: 100%;
-      padding: 16px 40px 16px 48px;
-      background-color: rgba(0, 0, 0, 0.9);
+      padding: 16px 20px 16px 48px;
+      background-color: rgba(0, 0, 0, 0.8);
       border: 1px solid var(--zinc-600);
       color: #fff;
       font-family: var(--font-zalando-sans);
@@ -546,22 +499,6 @@ require_once __DIR__ . '/auth.php';
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-    .col-search-close {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--zinc-500);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 4px 8px;
-      z-index: 21;
-    }
-    .col-search-close:hover {
-      color: #fff;
-    }
     .col-search-dropdown {
       display: none;
       position: absolute;
@@ -579,10 +516,7 @@ require_once __DIR__ . '/auth.php';
 
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const searchTrigger = document.getElementById('col-search-trigger');
-    const searchContainer = document.getElementById('col-search-input-container');
-    const searchQueryInput = document.getElementById('col-search-query-input');
-    const searchCloseBtn = document.getElementById('col-search-close-btn');
+    const searchInput = document.getElementById('col-search-input');
     const searchDropdown = document.getElementById('col-search-results-dropdown');
 
     const productsData = [
@@ -595,12 +529,12 @@ require_once __DIR__ . '/auth.php';
 
     const popularSearchesHTML = `
       <div style="padding: 12px 12px 8px 12px; font-size: 10px; color: var(--zinc-500); text-align: left; text-transform: uppercase; font-family: var(--font-nuqun); border-bottom: 1px solid var(--zinc-900);">Popular Searches</div>
-      <a href="subpage.php?id=03" class="search-dropdown-item" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); transition: background 0.2s;">
+      <a href="subpage.php?id=03" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); color: inherit;">
         <div style="font-size: 9px; color: var(--zinc-500); margin-bottom: 4px;">DESIGN 03 / RAWCODE</div>
         <div style="font-size: 14px; color: #fff; margin-bottom: 4px;">DESIGN 03</div>
         <div style="font-size: 10px; color: var(--zinc-400);">The core piece of the RAWCODE collection...</div>
       </a>
-      <a href="subpage.php?id=05" class="search-dropdown-item" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); transition: background 0.2s;">
+      <a href="subpage.php?id=05" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); color: inherit;">
         <div style="font-size: 9px; color: var(--zinc-500); margin-bottom: 4px;">DESIGN 05 / RAWCODE</div>
         <div style="font-size: 14px; color: #fff; margin-bottom: 4px;">DESIGN 05</div>
         <div style="font-size: 10px; color: var(--zinc-400);">Structured double-layer vest vestments...</div>
@@ -612,36 +546,32 @@ require_once __DIR__ . '/auth.php';
       searchDropdown.style.display = 'block';
     };
 
-    searchTrigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      searchTrigger.style.display = 'none';
-      searchContainer.style.display = 'block';
-      if (searchQueryInput.value.trim() === '') showPopularSearches();
-      setTimeout(() => searchQueryInput.focus(), 150);
+    // Show popular searches on focus
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim() === '') showPopularSearches();
     });
 
-    const closeSearch = () => {
-      searchContainer.style.display = 'none';
-      searchTrigger.style.display = 'block';
-      searchQueryInput.value = '';
-      searchDropdown.style.display = 'none';
-      searchDropdown.innerHTML = '';
-    };
-
-    searchCloseBtn.addEventListener('click', closeSearch);
-
+    // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
       const wrapper = document.querySelector('.col-search-wrapper');
-      if (!wrapper.contains(e.target) && searchContainer.style.display === 'block') {
-        closeSearch();
+      if (!wrapper.contains(e.target)) {
+        searchDropdown.style.display = 'none';
       }
     });
 
+    // Close on Escape
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && searchContainer.style.display === 'block') closeSearch();
+      if (e.key === 'Escape') searchDropdown.style.display = 'none';
     });
 
-    searchQueryInput.addEventListener('input', (e) => {
+    // Show popular when clicking the input
+    searchInput.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (searchInput.value.trim() === '') showPopularSearches();
+    });
+
+    // Filter on input
+    searchInput.addEventListener('input', (e) => {
       const query = e.target.value.trim().toLowerCase();
       if (query === '') { showPopularSearches(); return; }
       const filtered = productsData.filter(p => {
@@ -652,7 +582,7 @@ require_once __DIR__ . '/auth.php';
         searchDropdown.style.display = 'block'; return;
       }
       searchDropdown.innerHTML = filtered.map(p => `
-        <a href="subpage.php?id=${p.id}" class="search-dropdown-item" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); transition: background 0.2s;">
+        <a href="subpage.php?id=${p.id}" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); color: inherit;">
           <div style="font-size: 9px; color: var(--zinc-500); margin-bottom: 4px;">DESIGN ${p.id} / ${p.collection}</div>
           <div style="font-size: 14px; color: #fff; margin-bottom: 4px;">${p.name}</div>
           <div style="font-size: 10px; color: var(--zinc-400);">${p.desc}</div>
