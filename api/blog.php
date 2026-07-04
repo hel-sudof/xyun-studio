@@ -225,16 +225,17 @@ if (empty($blogs)) {
       padding: 24px 48px 0 48px;
       position: relative;
     }
-    .blog-search-wrapper::before {
-      content: "🔍";
+    .blog-search-icon {
       position: absolute;
       left: 60px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 14px;
       z-index: 2;
+      width: 16px;
+      height: 16px;
       opacity: 0.5;
       pointer-events: none;
+      color: #fff;
     }
     .blog-search-input {
       width: 100%;
@@ -273,6 +274,10 @@ if (empty($blogs)) {
     
     <!-- Blog Search Bar -->
     <div class="blog-search-wrapper">
+      <svg class="blog-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
       <input type="text" id="blog-search-input" class="blog-search-input" placeholder="SEARCH ARTICLES..." autocomplete="off">
     </div>
     

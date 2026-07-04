@@ -314,8 +314,18 @@ require_once __DIR__ . '/auth.php';
       <!-- Search Bar -->
       <div class="col-search-wrapper">
         <div class="col-search-inner">
-          <button id="col-search-trigger" type="button" class="col-search-trigger">SEARCH COLLECTION...</button>
+          <button id="col-search-trigger" type="button" class="col-search-trigger">
+            <svg class="col-search-trigger-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            SEARCH COLLECTION...
+          </button>
           <div id="col-search-input-container" class="col-search-input-container">
+            <svg class="col-search-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
             <input type="text" id="col-search-query-input" class="col-search-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off">
             <button id="col-search-close-btn" type="button" class="col-search-close">&times;</button>
           </div>
@@ -477,15 +487,28 @@ require_once __DIR__ . '/auth.php';
     .col-search-trigger:hover {
       border-color: var(--zinc-400);
     }
-    .col-search-trigger::before {
-      content: "🔍";
+    .col-search-trigger-icon {
       position: absolute;
       left: 18px;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 14px;
+      width: 16px;
+      height: 16px;
       opacity: 0.5;
       pointer-events: none;
+      color: #fff;
+    }
+    .col-search-input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      opacity: 0.5;
+      pointer-events: none;
+      color: #fff;
+      z-index: 22;
     }
     .col-search-input-container {
       display: none;
