@@ -313,7 +313,7 @@ array_unshift($blogs, $sampleBlog);
         <p id="blog-empty-msg" style="color: var(--zinc-500); grid-column: 1 / -1; text-align: center;">No articles available at the moment.</p>
       <?php else: ?>
         <?php foreach($blogs as $blog): ?>
-          <a href="blog_detail.php?id=<?php echo $blog['id']; ?>" class="blog-card" data-title="<?php echo htmlspecialchars(strtolower($blog['title'])); ?>" data-content="<?php echo htmlspecialchars(strtolower(strip_tags($blog['content']))); ?>">
+          <a href="blog_detail.php?id=<?php echo $blog['id']; ?>" class="blog-card" data-title="<?php echo htmlspecialchars(strtolower($blog['title'])); ?>" data-content="<?php echo htmlspecialchars(strtolower(strip_tags($blog['content']))); ?>" data-date="<?php echo htmlspecialchars($blog['date']); ?>">
             <img src="<?php echo htmlspecialchars($blog['image']); ?>" class="blog-img" alt="Blog image">
             <div class="blog-content-preview">
               <div class="blog-date"><?php echo date('M d, Y', strtotime($blog['date'])); ?> &mdash; <?php echo htmlspecialchars($blog['author']); ?></div>
@@ -340,7 +340,8 @@ array_unshift($blogs, $sampleBlog);
         blogCards.forEach(card => {
           const title = card.getAttribute('data-title') || '';
           const content = card.getAttribute('data-content') || '';
-          if (query === '' || title.includes(query) || content.includes(query)) {
+          const date = card.getAttribute('data-date') || '';
+          if (query === '' || title.includes(query) || content.includes(query) || date.includes(query)) {
             card.style.display = '';
             visibleCount++;
           } else {
