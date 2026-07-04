@@ -227,7 +227,7 @@ if (empty($blogs)) {
     }
     .blog-search-icon {
       position: absolute;
-      left: 60px;
+      left: 72px;
       top: 50%;
       transform: translateY(-50%);
       z-index: 2;

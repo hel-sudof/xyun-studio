@@ -489,7 +489,7 @@ require_once __DIR__ . '/auth.php';
     }
     .col-search-trigger-icon {
       position: absolute;
-      left: 18px;
+      left: 24px;
       top: 50%;
       transform: translateY(-50%);
       width: 16px;
@@ -500,7 +500,7 @@ require_once __DIR__ . '/auth.php';
     }
     .col-search-input-icon {
       position: absolute;
-      left: 14px;
+      left: 24px;
       top: 50%;
       transform: translateY(-50%);
       width: 16px;
