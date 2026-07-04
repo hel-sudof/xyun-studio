@@ -86,7 +86,6 @@ $product = $products[$id];
       margin: 0 auto;
       height: calc(100vh - 120px);
       padding: 0;
-      overflow: hidden;
     }
     
     @media (min-width: 1024px) {
@@ -103,22 +102,22 @@ $product = $products[$id];
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-left: 32px;
+      padding-left: 0;
     }
     
     @media (min-width: 1024px) {
       .view-container {
-        height: 100%; /* Fill viewport space entirely */
+        height: 100%;
       }
     }
     
     @media (min-width: 1440px) {
       .sub-layout {
         grid-template-columns: 5fr 5fr;
-        gap: 60px;
+        gap: 40px;
       }
       .view-container {
-        padding-right: 40px;
+        padding-right: 0;
       }
     }
     
@@ -133,17 +132,12 @@ $product = $products[$id];
       height: 100%;
       transition: opacity 0.3s ease;
     }
-    
-    .catalogue-grid {
-      overflow: hidden;
-    }
     .catalogue-grid .dynamic-box {
       aspect-ratio: 3 / 5;
       overflow: hidden;
     }
     
     .catalogue-grid .dynamic-box img {
-      transform: scale(0.88);
       transition: transform 0.5s ease;
     }
     
@@ -227,7 +221,6 @@ $product = $products[$id];
       height: auto;
       padding: 0;
       transition: opacity 0.3s ease;
-      overflow: hidden;
     }
     
     @media (min-width: 1024px) {
