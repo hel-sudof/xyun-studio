@@ -34,6 +34,7 @@ We believe that clothing is not just fabric, but armor for the modern world. <3'
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>xyún studio | BLOG</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
   <style>
     html, body {
       overflow-y: auto !important;
@@ -370,7 +371,11 @@ We believe that clothing is not just fabric, but armor for the modern world. <3'
         
         <div class="form-group">
           <label>UPLOAD IMAGE</label>
-          <input type="file" name="image_file" accept="image/*" style="color: var(--zinc-400);">
+          <input type="file" id="blog-image-input" name="image_file" accept="image/*" style="color: var(--zinc-400);">
+          <div id="crop-preview" style="display:none; margin-top:12px; position:relative;">
+            <img id="crop-preview-img" style="max-width:100%; max-height:200px; object-fit:contain; border:1px solid var(--zinc-800);">
+            <button id="crop-repick-btn" type="button" style="position:absolute; top:4px; right:4px; background:#000; border:1px solid var(--zinc-600); color:#fff; padding:4px 10px; font-size:10px; cursor:pointer; letter-spacing:0.05em;">REPLACE</button>
+          </div>
         </div>
         
         <div class="form-group">
@@ -395,6 +400,125 @@ We believe that clothing is not just fabric, but armor for the modern world. <3'
     modal.addEventListener('click', (e) => {
       if (e.target === modal) modal.classList.remove('open');
     });
+  </script>
+
+  <!-- Crop Modal -->
+  <div id="crop-modal" class="blog-modal">
+    <div class="blog-modal-content" style="max-width:700px;">
+      <button id="crop-modal-close-btn" type="button" style="position: absolute; right: 16px; top: 16px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; z-index:10;">&times;</button>
+      <h2 style="font-family: var(--font-nuqun); color: #fff; margin-bottom: 16px; letter-spacing: 0.1em;">CROP IMAGE</h2>
+      <div style="max-height:55vh; overflow:hidden; background:#111; margin-bottom:16px;">
+        <img id="crop-image" src="" style="max-width:100%;">
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px;">
+        <button id="crop-zoom-in" type="button" style="background:#000; border:1px solid var(--zinc-600); color:#fff; padding:8px 16px; cursor:pointer; font-size:12px;">ZOOM +</button>
+        <button id="crop-zoom-out" type="button" style="background:#000; border:1px solid var(--zinc-600); color:#fff; padding:8px 16px; cursor:pointer; font-size:12px;">ZOOM -</button>
+        <button id="crop-rotate" type="button" style="background:#000; border:1px solid var(--zinc-600); color:#fff; padding:8px 16px; cursor:pointer; font-size:12px;">ROTATE</button>
+        <button id="crop-flip" type="button" style="background:#000; border:1px solid var(--zinc-600); color:#fff; padding:8px 16px; cursor:pointer; font-size:12px;">FLIP H</button>
+        <button id="crop-reset" type="button" style="background:#000; border:1px solid var(--zinc-600); color:#fff; padding:8px 16px; cursor:pointer; font-size:12px;">RESET</button>
+      </div>
+      <button id="crop-apply-btn" type="button" class="luxury-btn" style="width:100%; border:1px solid #fff;">APPLY CROP</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('blog-image-input');
+    const cropPreview = document.getElementById('crop-preview');
+    const cropPreviewImg = document.getElementById('crop-preview-img');
+    const repickBtn = document.getElementById('crop-repick-btn');
+    const cropModal = document.getElementById('crop-modal');
+    const cropModalClose = document.getElementById('crop-modal-close-btn');
+    const cropImage = document.getElementById('crop-image');
+    const cropApply = document.getElementById('crop-apply-btn');
+    const zoomIn = document.getElementById('crop-zoom-in');
+    const zoomOut = document.getElementById('crop-zoom-out');
+    const rotateBtn = document.getElementById('crop-rotate');
+    const flipBtn = document.getElementById('crop-flip');
+    const resetBtn = document.getElementById('crop-reset');
+
+    let cropper = null;
+    let currentFile = null;
+    let croppedBlob = null;
+
+    function openCropModal(file) {
+      currentFile = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        cropImage.src = e.target.result;
+        cropModal.classList.add('open');
+        setTimeout(() => {
+          if (cropper) cropper.destroy();
+          cropper = new Cropper(cropImage, {
+            aspectRatio: NaN,
+            viewMode: 1,
+            autoCropArea: 0.9,
+            background: false,
+          });
+        }, 300);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      // Reject files > 5MB immediately
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File too large. Max 5MB.');
+        fileInput.value = '';
+        return;
+      }
+      openCropModal(file);
+    });
+
+    repickBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    cropApply.addEventListener('click', () => {
+      if (!cropper) return;
+      const canvas = cropper.getCroppedCanvas({ width: 1200 });
+      canvas.toBlob((blob) => {
+        croppedBlob = blob;
+        // Show preview
+        const url = URL.createObjectURL(blob);
+        cropPreviewImg.src = url;
+        cropPreview.style.display = 'block';
+        // Close modal
+        cropModal.classList.remove('open');
+        if (cropper) { cropper.destroy(); cropper = null; }
+        // Replace file input with cropped version via DataTransfer
+        const newFile = new File([blob], currentFile.name, { type: 'image/png' });
+        const dt = new DataTransfer();
+        dt.items.add(newFile);
+        fileInput.files = dt.files;
+      }, 'image/png', 0.92);
+    });
+
+    cropModalClose.addEventListener('click', () => {
+      cropModal.classList.remove('open');
+      if (cropper) { cropper.destroy(); cropper = null; }
+      fileInput.value = '';
+      cropPreview.style.display = 'none';
+    });
+
+    cropModal.addEventListener('click', (e) => {
+      if (e.target === cropModal) {
+        cropModal.classList.remove('open');
+        if (cropper) { cropper.destroy(); cropper = null; }
+        fileInput.value = '';
+        cropPreview.style.display = 'none';
+      }
+    });
+
+    zoomIn.addEventListener('click', () => cropper?.zoom(0.1));
+    zoomOut.addEventListener('click', () => cropper?.zoom(-0.1));
+    rotateBtn.addEventListener('click', () => cropper?.rotate(90));
+    flipBtn.addEventListener('click', () => cropper?.scaleX(-(cropper.getData().scaleX || 1)));
+    resetBtn.addEventListener('click', () => cropper?.reset());
+  });
   </script>
   <?php endif; ?>
 
