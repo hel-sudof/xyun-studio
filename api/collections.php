@@ -311,6 +311,18 @@ require_once __DIR__ . '/auth.php';
       <!-- Spacing -->
       <div></div>
 
+      <!-- Search Bar -->
+      <div class="search-collections-wrapper" style="max-width: 1200px; margin: 0 auto 24px auto; padding: 0 24px; position: relative; z-index: 10;">
+        <div class="search-inline-wrapper" style="position: relative; width: 100%;">
+          <button id="search-trigger" type="button" style="width: 100%; padding: 12px 20px; background-color: #000; border: 1px solid var(--zinc-800); color: var(--zinc-500); font-family: var(--font-nuqun); font-size: 11px; letter-spacing: 0.1em; text-align: left; cursor: pointer; transition: border-color 0.3s;">SEARCH COLLECTION...</button>
+          <div id="search-input-container" class="search-input-container" style="display: none; position: absolute; top: 0; left: 0; right: 0; z-index: 20;">
+            <input type="text" id="search-query-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off" style="width: 100%; padding: 12px 40px 12px 20px; background-color: #000; border: 1px solid var(--zinc-800); color: #fff; font-family: var(--font-zalando-sans); font-size: 11px; outline: none;">
+            <button id="search-close-btn" type="button" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--zinc-500); font-size: 18px; cursor: pointer; padding: 4px 8px;">&times;</button>
+          </div>
+          <div id="search-results-dropdown" class="search-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background-color: #000; border: 1px solid var(--zinc-800); border-top: none; z-index: 30; max-height: 400px; overflow-y: auto;"></div>
+        </div>
+      </div>
+
       <!-- Catalogue items grid -->
       <div class="sec-2-grid">
         
@@ -435,6 +447,92 @@ require_once __DIR__ . '/auth.php';
       50% { transform: translateY(-5px); }
     }
   </style>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchTrigger = document.getElementById('search-trigger');
+    const searchContainer = document.getElementById('search-input-container');
+    const searchQueryInput = document.getElementById('search-query-input');
+    const searchCloseBtn = document.getElementById('search-close-btn');
+    const searchDropdown = document.getElementById('search-results-dropdown');
+
+    const productsData = [
+      { id: "01", name: "DESIGN 01", collection: "RAWCODE", items: ["HIGH NECK TOP (RC/T-005)", "BAGGY JEANS (RC/P-003)"], desc: "A striking combination of high-collar structuring and loose utility jeans featuring detailed hand-painted metallic coatings." },
+      { id: "02", name: "DESIGN 02", collection: "RAWCODE", items: ["OFF SHOULDER TOP (RC/T-002)", "RUFFLE SKIRT (RC/S-001)"], desc: "An asymmetric silhouette pairing a soft, structured off-shoulder drape with a heavy-weight raw edge ruffle denim skirt." },
+      { id: "03", name: "DESIGN 03", collection: "RAWCODE", items: ["HIGH NECK TOP (RC/T-003)", "BAGGY JEANS (RC/P-002)"], desc: "The core piece of the RAWCODE collection, featuring hand-manipulated foil coatings and metallic distressing across high-neck styling." },
+      { id: "04", name: "DESIGN 04", collection: "RAWCODE", items: ["HIGH NECK TOP (RC/T-005)", "CROPPED OUTER (RC/O-001)", "MINI SKIRT (RC/S-002)"], desc: "A three-piece industrial look combining high-necked layering, premium cropped distressed leather outer, and a raw-hem denim mini skirt." },
+      { id: "05", name: "DESIGN 05", collection: "RAWCODE", items: ["DOUBLE VEST (RC/T-001)", "BAGGY JEANS (RC/P-001)"], desc: "Structured double-layer vest vestments featuring technical buckle systems paired with relaxed raw-cut denim denim trousers." }
+    ];
+
+    const popularSearchesHTML = `
+      <div style="padding: 12px 12px 8px 12px; font-size: 10px; color: var(--zinc-500); text-align: left; text-transform: uppercase; font-family: var(--font-nuqun); border-bottom: 1px solid var(--zinc-900);">Popular Searches</div>
+      <a href="subpage.php?id=03" class="search-dropdown-item" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); transition: background 0.2s;">
+        <div style="font-size: 9px; color: var(--zinc-500); margin-bottom: 4px;">DESIGN 03 / RAWCODE</div>
+        <div style="font-size: 14px; color: #fff; margin-bottom: 4px;">DESIGN 03</div>
+        <div style="font-size: 10px; color: var(--zinc-400);">The core piece of the RAWCODE collection...</div>
+      </a>
+      <a href="subpage.php?id=05" class="search-dropdown-item" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); transition: background 0.2s;">
+        <div style="font-size: 9px; color: var(--zinc-500); margin-bottom: 4px;">DESIGN 05 / RAWCODE</div>
+        <div style="font-size: 14px; color: #fff; margin-bottom: 4px;">DESIGN 05</div>
+        <div style="font-size: 10px; color: var(--zinc-400);">Structured double-layer vest vestments...</div>
+      </a>
+    `;
+
+    const showPopularSearches = () => {
+      searchDropdown.innerHTML = popularSearchesHTML;
+      searchDropdown.style.display = 'block';
+    };
+
+    searchTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      searchTrigger.style.display = 'none';
+      searchContainer.style.display = 'block';
+      if (searchQueryInput.value.trim() === '') showPopularSearches();
+      setTimeout(() => searchQueryInput.focus(), 150);
+    });
+
+    const closeSearch = () => {
+      searchContainer.style.display = 'none';
+      searchTrigger.style.display = 'block';
+      searchQueryInput.value = '';
+      searchDropdown.style.display = 'none';
+      searchDropdown.innerHTML = '';
+    };
+
+    searchCloseBtn.addEventListener('click', closeSearch);
+
+    document.addEventListener('click', (e) => {
+      const wrapper = document.querySelector('.search-collections-wrapper');
+      if (!wrapper.contains(e.target) && searchContainer.style.display === 'block') {
+        closeSearch();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && searchContainer.style.display === 'block') closeSearch();
+    });
+
+    searchQueryInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      if (query === '') { showPopularSearches(); return; }
+      const filtered = productsData.filter(p => {
+        return p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query) || p.id.includes(query) || p.items.some(item => item.toLowerCase().includes(query));
+      });
+      if (filtered.length === 0) {
+        searchDropdown.innerHTML = '<div style="padding: 12px; font-size: 10px; color: var(--zinc-600); text-align: center; text-transform: uppercase;">No matches found</div>';
+        searchDropdown.style.display = 'block'; return;
+      }
+      searchDropdown.innerHTML = filtered.map(p => `
+        <a href="subpage.php?id=${p.id}" class="search-dropdown-item" style="display: block; padding: 12px; text-decoration: none; border-bottom: 1px solid var(--zinc-900); transition: background 0.2s;">
+          <div style="font-size: 9px; color: var(--zinc-500); margin-bottom: 4px;">DESIGN ${p.id} / ${p.collection}</div>
+          <div style="font-size: 14px; color: #fff; margin-bottom: 4px;">${p.name}</div>
+          <div style="font-size: 10px; color: var(--zinc-400);">${p.desc}</div>
+        </a>
+      `).join('');
+      searchDropdown.style.display = 'block';
+    });
+  });
+  </script>
 
 </body>
 </html>

@@ -11,6 +11,22 @@ try {
     // Fall through
 }
 
+// Fallback to JSON
+if (!$blog) {
+    $jsonFile = realpath(__DIR__ . '/../data/blogs.json');
+    if ($jsonFile && file_exists($jsonFile)) {
+        $jsonData = json_decode(file_get_contents($jsonFile), true);
+        if (is_array($jsonData)) {
+            foreach ($jsonData as $b) {
+                if ($b['id'] === $id) {
+                    $blog = $b;
+                    break;
+                }
+            }
+        }
+    }
+}
+
 if (!$blog) {
     header('Location: blog.php');
     exit;

@@ -7,6 +7,17 @@ try {
 } catch (Exception $e) {
     $blogs = [];
 }
+
+// Fallback to JSON if database is empty
+if (empty($blogs)) {
+    $jsonFile = realpath(__DIR__ . '/../data/blogs.json');
+    if ($jsonFile && file_exists($jsonFile)) {
+        $jsonData = json_decode(file_get_contents($jsonFile), true);
+        if (is_array($jsonData)) {
+            $blogs = $jsonData;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -206,6 +217,33 @@ try {
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       border: none;
     }
+    
+    /* Blog Search Bar */
+    .blog-search-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 48px 0 48px;
+    }
+    .blog-search-input {
+      width: 100%;
+      padding: 14px 20px;
+      background-color: #000;
+      border: 1px solid var(--zinc-800);
+      color: #fff;
+      font-family: var(--font-zalando-sans);
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+    .blog-search-input:focus {
+      border-color: var(--zinc-500);
+    }
+    .blog-search-input::placeholder {
+      color: var(--zinc-600);
+      text-transform: uppercase;
+    }
   </style>
 </head>
 <body>
@@ -218,12 +256,17 @@ try {
       <div class="page-subtitle">STORIES, INSPIRATION, AND BEHIND THE SCENES</div>
     </div>
     
-    <div class="blog-grid">
+    <!-- Blog Search Bar -->
+    <div class="blog-search-wrapper">
+      <input type="text" id="blog-search-input" class="blog-search-input" placeholder="SEARCH ARTICLES..." autocomplete="off">
+    </div>
+    
+    <div class="blog-grid" id="blog-grid">
       <?php if(empty($blogs)): ?>
-        <p style="color: var(--zinc-500); grid-column: 1 / -1; text-align: center;">No articles available at the moment.</p>
+        <p id="blog-empty-msg" style="color: var(--zinc-500); grid-column: 1 / -1; text-align: center;">No articles available at the moment.</p>
       <?php else: ?>
         <?php foreach($blogs as $blog): ?>
-          <a href="blog_detail.php?id=<?php echo $blog['id']; ?>" class="blog-card">
+          <a href="blog_detail.php?id=<?php echo $blog['id']; ?>" class="blog-card" data-title="<?php echo htmlspecialchars(strtolower($blog['title'])); ?>" data-content="<?php echo htmlspecialchars(strtolower(strip_tags($blog['content']))); ?>">
             <img src="<?php echo htmlspecialchars($blog['image']); ?>" class="blog-img" alt="Blog image">
             <div class="blog-content-preview">
               <div class="blog-date"><?php echo date('M d, Y', strtotime($blog['date'])); ?> &mdash; <?php echo htmlspecialchars($blog['author']); ?></div>
@@ -235,6 +278,37 @@ try {
       <?php endif; ?>
     </div>
   </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('blog-search-input');
+    const blogCards = document.querySelectorAll('.blog-card');
+    const emptyMsg = document.getElementById('blog-empty-msg');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        blogCards.forEach(card => {
+          const title = card.getAttribute('data-title') || '';
+          const content = card.getAttribute('data-content') || '';
+          if (query === '' || title.includes(query) || content.includes(query)) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (emptyMsg) {
+          emptyMsg.style.display = (visibleCount === 0) ? '' : 'none';
+          if (visibleCount === 0) emptyMsg.textContent = 'No articles match your search.';
+        }
+      });
+    }
+  });
+  </script>
   
   <?php if (isAdmin()): ?>
     <!-- Floating Action Button for Admin -->
