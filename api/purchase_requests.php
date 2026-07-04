@@ -258,6 +258,61 @@ if (empty($purchases)) {
     .btn-accept:hover { background-color: #166534; border-color: #166534; }
     .btn-decline:hover { background-color: #991b1b; border-color: #991b1b; }
 
+    /* Collapse / Expand */
+    .req-toggle {
+      cursor: pointer;
+      user-select: none;
+    }
+    .req-toggle-icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+      margin-left: 8px;
+      font-size: 14px;
+      color: var(--zinc-500);
+    }
+    .req-toggle-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+    .req-details-wrap {
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+    .req-details-wrap.expanded {
+      max-height: 800px;
+      opacity: 1;
+    }
+
+    /* Filter pills */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .filter-pill {
+      background: none;
+      border: 1px solid var(--zinc-700);
+      color: var(--zinc-400);
+      padding: 8px 20px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-nuqun);
+      text-transform: uppercase;
+    }
+    .filter-pill:hover {
+      border-color: var(--zinc-500);
+      color: #fff;
+    }
+    .filter-pill.active {
+      background-color: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
   </style>
 </head>
 <body class="animate-fade-in">
@@ -271,6 +326,16 @@ if (empty($purchases)) {
     </div>
 
     <div class="requests-container">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <button class="filter-pill active" data-filter="all">ALL</button>
+        <button class="filter-pill" data-filter="01">DESIGN 01</button>
+        <button class="filter-pill" data-filter="02">DESIGN 02</button>
+        <button class="filter-pill" data-filter="03">DESIGN 03</button>
+        <button class="filter-pill" data-filter="04">DESIGN 04</button>
+        <button class="filter-pill" data-filter="05">DESIGN 05</button>
+      </div>
+
       <?php if (empty($purchases)): ?>
         <div style="text-align: center; color: var(--zinc-500); padding: 60px 0;">
           <p>NO PURCHASE REQUESTS YET.</p>
@@ -288,17 +353,21 @@ if (empty($purchases)) {
             if (!is_array($customer)) $customer = [];
             if (!is_array($items)) $items = [];
         ?>
-          <div class="request-card" id="card-<?php echo htmlspecialchars($req['id']); ?>">
-            <div class="req-header">
-              <div>
-                <div class="req-id">#<?php echo htmlspecialchars($req['id']); ?></div>
-                <div class="req-time"><?php echo htmlspecialchars($req['timestamp']); ?></div>
+          <div class="request-card" id="card-<?php echo htmlspecialchars($req['id']); ?>" data-product="<?php echo htmlspecialchars($req['product_id']); ?>">
+            <div class="req-header req-toggle" onclick="toggleCard('<?php echo htmlspecialchars($req['id']); ?>')">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="req-toggle-icon" id="icon-<?php echo htmlspecialchars($req['id']); ?>">&#9660;</span>
+                <div>
+                  <div class="req-id">#<?php echo htmlspecialchars($req['id']); ?></div>
+                  <div class="req-time"><?php echo htmlspecialchars($req['timestamp']); ?></div>
+                </div>
               </div>
               <div>
                 <span class="status-badge <?php echo $status_class; ?>" id="status-<?php echo htmlspecialchars($req['id']); ?>"><?php echo htmlspecialchars($status); ?></span>
               </div>
             </div>
             
+            <div class="req-details-wrap" id="details-<?php echo htmlspecialchars($req['id']); ?>">
             <div class="req-grid">
               <div class="req-section">
                 <h4>CUSTOMER DETAILS</h4>
@@ -333,6 +402,7 @@ if (empty($purchases)) {
             <div class="action-btns" id="undo-<?php echo htmlspecialchars($req['id']); ?>" style="display: <?php echo $status !== 'Pending' ? 'flex' : 'none'; ?>">
               <button class="btn-action" onclick="updateStatus('<?php echo htmlspecialchars($req['id']); ?>', 'undo')">UNDO ACTION</button>
             </div>
+            </div><!-- /req-details-wrap -->
           </div>
         <?php endforeach; ?>
       <?php endif; ?>
@@ -340,6 +410,52 @@ if (empty($purchases)) {
   </div>
 
   <script>
+    // ---------- COLLAPSE / EXPAND ----------
+    function toggleCard(id) {
+      const wrap = document.getElementById('details-' + id);
+      const icon = document.getElementById('icon-' + id);
+      const isExpanded = wrap.classList.contains('expanded');
+      
+      if (isExpanded) {
+        wrap.classList.remove('expanded');
+        icon.classList.add('collapsed');
+      } else {
+        wrap.classList.add('expanded');
+        icon.classList.remove('collapsed');
+      }
+    }
+
+    // Expand all cards by default on load
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.req-details-wrap').forEach(w => w.classList.add('expanded'));
+    });
+
+    // ---------- FILTER BY PRODUCT ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      const pills = document.querySelectorAll('.filter-pill');
+      const cards = document.querySelectorAll('.request-card');
+
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          // Update active pill
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+
+          const filter = pill.getAttribute('data-filter');
+
+          cards.forEach(card => {
+            if (filter === 'all') {
+              card.style.display = '';
+            } else {
+              const productId = card.getAttribute('data-product');
+              card.style.display = productId === filter ? '' : 'none';
+            }
+          });
+        });
+      });
+    });
+
+    // ---------- STATUS UPDATE ----------
     function updateStatus(id, action) {
       if (!confirm('Are you sure you want to ' + action + ' this request?')) return;
       
@@ -351,7 +467,6 @@ if (empty($purchases)) {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          // Update badge UI
           const badge = document.getElementById('status-' + id);
           badge.textContent = data.new_status;
           
