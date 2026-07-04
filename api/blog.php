@@ -1,4 +1,5 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/db.php';
 
@@ -275,6 +276,13 @@ We believe that clothing is not just fabric, but armor for the modern world. <3'
 <body>
 
   <?php include 'header.php'; ?>
+
+  <?php if (isset($_SESSION['flash_msg'])): ?>
+    <div style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; background: #cc3333; color: #fff; padding: 14px 28px; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--font-zalando-sans);">
+      <?php echo htmlspecialchars($_SESSION['flash_msg']); ?>
+    </div>
+    <?php unset($_SESSION['flash_msg']); ?>
+  <?php endif; ?>
 
   <div class="page-container animate-fade-in">
     <div class="page-header">
