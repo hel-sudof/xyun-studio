@@ -634,13 +634,12 @@ $product = $products[$id];
         <div id="view-catalogue" class="catalogue-grid">
           <?php 
           $idNum = (int)$id;
-          $bgDir = realpath(__DIR__ . '/../bg') ?: __DIR__ . '/../bg';
           for($i=1; $i<=4; $i++): 
-            $imgFile = "sub{$idNum}cat{$i}.png";
-            if (!file_exists($bgDir . '/' . $imgFile)) $imgFile = "sub1cat{$i}.png";
+            $imgFile = "bg/sub{$idNum}cat{$i}.png";
+            $fallbackFile = "bg/sub1cat{$i}.png";
           ?>
             <div class="dynamic-box">
-              <img src="bg/<?php echo $imgFile; ?>" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
+              <img src="<?php echo $imgFile; ?>" onerror="this.onerror=null; this.src='<?php echo $fallbackFile; ?>';" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
             </div>
           <?php endfor; ?>
         </div>
@@ -649,11 +648,11 @@ $product = $products[$id];
         <div id="view-details" class="details-grid" style="display: none;">
           <?php 
           for($i=1; $i<=6; $i++): 
-            $imgFile = "sub{$idNum}det{$i}.png";
-            if (!file_exists($bgDir . '/' . $imgFile)) $imgFile = "sub1det{$i}.png";
+            $imgFile = "bg/sub{$idNum}det{$i}.png";
+            $fallbackFile = "bg/sub1det{$i}.png";
           ?>
             <div class="dynamic-box">
-              <img src="bg/<?php echo $imgFile; ?>" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
+              <img src="<?php echo $imgFile; ?>" onerror="this.onerror=null; this.src='<?php echo $fallbackFile; ?>';" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; z-index: 1;">
             </div>
           <?php endfor; ?>
         </div>
