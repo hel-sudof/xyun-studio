@@ -8,15 +8,22 @@ try {
     $blogs = [];
 }
 
-// Fallback to JSON if database is empty
+// Fallback: inline sample blog if no data from DB or JSON
 if (empty($blogs)) {
-    $jsonFile = realpath(__DIR__ . '/../data/blogs.json');
-    if ($jsonFile && file_exists($jsonFile)) {
-        $jsonData = json_decode(file_get_contents($jsonFile), true);
-        if (is_array($jsonData)) {
-            $blogs = $jsonData;
-        }
-    }
+    $blogs = [
+        [
+            'id' => '1',
+            'title' => 'BEHIND THE SCENES: RAWCODE COLLECTION',
+            'image' => 'bg/menubg1.jpg',
+            'content' => 'Exploring the industrial roots of our Autumn/Winter 2026 collection. The RAWCODE collection was born out of a desire to merge raw, unfinished materials with highly structured silhouettes. From heavy-weight denim to synthetic leather panelling, every piece is designed to tell a story of urban resilience.
+
+Our design process involved hundreds of hours of hand-manipulated fabric distressing, foil coating applications, and testing various metal hardware components to ensure durability and aesthetic perfection.
+
+We believe that clothing is not just fabric, but armor for the modern world. <3',
+            'date' => '2026-07-01',
+            'author' => 'xyún admin'
+        ]
+    ];
 }
 ?>
 <!DOCTYPE html>
