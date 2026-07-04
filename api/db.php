@@ -30,7 +30,8 @@ function getDbConnection() {
         $sslmode = $query['sslmode'] ?? 'require';
         
         try {
-            $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+            // Include SSL mode in DSN for proper initial connection
+            $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=$sslmode";
             
             $options = [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -39,11 +40,6 @@ function getDbConnection() {
             ];
             
             $pdo = new PDO($dsn, $user, $pass, $options);
-            
-            // Set SSL mode if needed
-            if ($sslmode === 'require') {
-                $pdo->exec("SET sslmode = 'require'");
-            }
             
             // Auto-create tables if they don't exist
             $pdo->exec("
