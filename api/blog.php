@@ -182,8 +182,15 @@ We believe that clothing is not just fabric, but armor for the modern world. <3'
       border: 1px solid var(--zinc-800);
       width: 100%;
       max-width: 600px;
+      max-height: 85vh;
       padding: 32px;
       position: relative;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    /* Crop modal needs more width */
+    .blog-modal-content.crop-content {
+      max-width: 700px;
     }
     
     .form-group {
@@ -404,7 +411,7 @@ We believe that clothing is not just fabric, but armor for the modern world. <3'
 
   <!-- Crop Modal -->
   <div id="crop-modal" class="blog-modal">
-    <div class="blog-modal-content" style="max-width:700px;">
+    <div class="blog-modal-content crop-content">
       <button id="crop-modal-close-btn" type="button" style="position: absolute; right: 16px; top: 16px; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; z-index:10;">&times;</button>
       <h2 style="font-family: var(--font-nuqun); color: #fff; margin-bottom: 16px; letter-spacing: 0.1em;">CROP IMAGE</h2>
       <div style="max-height:55vh; overflow:hidden; background:#111; margin-bottom:16px;">
