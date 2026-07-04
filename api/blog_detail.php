@@ -13,9 +13,10 @@ try {
 
 // Fallback: inline sample blog
 if (!$blog) {
-    $sampleBlogs = [
-        '1' => [
-            'id' => '1',
+    // Try sample blog
+    if ($id === 'sample-1' || $id === '1') {
+        $blog = [
+            'id' => 'sample-1',
             'title' => 'BEHIND THE SCENES: RAWCODE COLLECTION',
             'image' => 'bg/menubg1.jpg',
             'content' => 'Exploring the industrial roots of our Autumn/Winter 2026 collection. The RAWCODE collection was born out of a desire to merge raw, unfinished materials with highly structured silhouettes. From heavy-weight denim to synthetic leather panelling, every piece is designed to tell a story of urban resilience.
@@ -25,10 +26,7 @@ Our design process involved hundreds of hours of hand-manipulated fabric distres
 We believe that clothing is not just fabric, but armor for the modern world. <3',
             'date' => '2026-07-01',
             'author' => 'xyún admin'
-        ]
-    ];
-    if (isset($sampleBlogs[$id])) {
-        $blog = $sampleBlogs[$id];
+        ];
     }
 }
 
