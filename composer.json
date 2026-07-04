@@ -1,0 +1,12 @@
+{
+    "name": "xyun-studio/website",
+    "description": "xyún studio — Official Website",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-pgsql": "*",
+        "ext-json": "*",
+        "ext-fileinfo": "*"
+    }
+}
