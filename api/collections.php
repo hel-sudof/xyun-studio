@@ -322,12 +322,14 @@ require_once __DIR__ . '/auth.php';
             SEARCH COLLECTION...
           </button>
           <div id="col-search-input-container" class="col-search-input-container">
-            <svg class="col-search-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input type="text" id="col-search-query-input" class="col-search-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off">
-            <button id="col-search-close-btn" type="button" class="col-search-close">&times;</button>
+            <div class="col-search-input-field">
+              <svg class="col-search-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="text" id="col-search-query-input" class="col-search-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off">
+              <button id="col-search-close-btn" type="button" class="col-search-close">&times;</button>
+            </div>
           </div>
           <div id="col-search-results-dropdown" class="col-search-dropdown"></div>
         </div>
@@ -498,9 +500,12 @@ require_once __DIR__ . '/auth.php';
       pointer-events: none;
       color: #fff;
     }
+    .col-search-input-field {
+      position: relative;
+    }
     .col-search-input-icon {
       position: absolute;
-      left: 24px;
+      left: 16px;
       top: 50%;
       transform: translateY(-50%);
       width: 16px;
