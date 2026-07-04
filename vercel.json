@@ -1,5 +1,4 @@
 {
-  "name": "xyun-studio",
   "version": 2,
   "buildCommand": null,
   "devCommand": null,
@@ -22,8 +21,5 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ],
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
+  ]
 }
