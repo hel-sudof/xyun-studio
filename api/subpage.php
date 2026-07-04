@@ -84,8 +84,9 @@ $product = $products[$id];
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      height: calc(100vh - 120px); /* Fit within viewport */
+      height: calc(100vh - 120px);
       padding: 0;
+      overflow: hidden;
     }
     
     @media (min-width: 1024px) {
@@ -114,10 +115,10 @@ $product = $products[$id];
     @media (min-width: 1440px) {
       .sub-layout {
         grid-template-columns: 5fr 5fr;
-        gap: 100px;
+        gap: 60px;
       }
       .view-container {
-        padding-right: 190px;
+        padding-right: 40px;
       }
     }
     
@@ -133,6 +134,9 @@ $product = $products[$id];
       transition: opacity 0.3s ease;
     }
     
+    .catalogue-grid {
+      overflow: hidden;
+    }
     .catalogue-grid .dynamic-box {
       aspect-ratio: 3 / 5;
       overflow: hidden;
@@ -223,6 +227,7 @@ $product = $products[$id];
       height: auto;
       padding: 0;
       transition: opacity 0.3s ease;
+      overflow: hidden;
     }
     
     @media (min-width: 1024px) {
