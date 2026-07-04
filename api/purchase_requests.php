@@ -15,9 +15,9 @@ try {
     $purchases = [];
 }
 
-// Fallback: sample purchase requests if database is empty
+// Fallback: seed sample purchase requests into database if empty
 if (empty($purchases)) {
-    $purchases = [
+    $samples = [
         [
             'id' => 'REQ-001',
             'timestamp' => '2026-07-04 10:30:00',
@@ -87,6 +87,37 @@ if (empty($purchases)) {
             'status' => 'Declined'
         ]
     ];
+
+    // Insert samples into database so Accept/Decline work
+    try {
+        $pdo = getDbConnection();
+        $stmt = $pdo->prepare("INSERT INTO purchases (id, timestamp, product_id, product_name, items, customer, status, created_at) VALUES (:id, :ts, :pid, :pname, :items, :customer, :status, NOW()) ON CONFLICT (id) DO NOTHING");
+        foreach ($samples as $s) {
+            $stmt->execute([
+                ':id' => $s['id'],
+                ':ts' => $s['timestamp'],
+                ':pid' => $s['product_id'],
+                ':pname' => $s['product_name'],
+                ':items' => $s['items'],
+                ':customer' => $s['customer'],
+                ':status' => $s['status']
+            ]);
+        }
+    } catch (Exception $e) {
+        // Silently fail — will use the inline array below
+    }
+
+    // Now read back from DB so sample data is in the DB
+    try {
+        $purchases = dbFetchAll("SELECT * FROM purchases ORDER BY timestamp DESC");
+    } catch (Exception $e) {
+        $purchases = [];
+    }
+
+    // If still empty, use the inline array as last resort
+    if (empty($purchases)) {
+        $purchases = $samples;
+    }
 }
 ?>
 <!DOCTYPE html>
