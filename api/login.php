@@ -9,20 +9,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (!empty($username) && !empty($password)) {
-        $isAdmin = false;
-        
         if ($email === 'elzhelenajonathan@gmail.com') {
             if ($password === 'admin123') {
-                $isAdmin = true;
+                setAuthCookie($username, true);
+                header('Location: blog.php');
+                exit;
             } else {
                 $error = 'Invalid admin password.';
             }
-        }
-        
-        if (!$error) {
-            setAuthCookie($username, $isAdmin);
-            header('Location: blog.php');
-            exit;
+        } else {
+            $error = 'Access denied. Admin credentials only.';
         }
     } else {
         $error = 'Username and password are required.';
