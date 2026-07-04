@@ -312,14 +312,14 @@ require_once __DIR__ . '/auth.php';
       <div></div>
 
       <!-- Search Bar -->
-      <div class="search-collections-wrapper" style="max-width: 1200px; margin: 0 auto 24px auto; padding: 0 24px; position: relative; z-index: 10;">
-        <div class="search-inline-wrapper" style="position: relative; width: 100%;">
-          <button id="search-trigger" type="button" style="width: 100%; padding: 12px 20px; background-color: #000; border: 1px solid var(--zinc-800); color: var(--zinc-500); font-family: var(--font-nuqun); font-size: 11px; letter-spacing: 0.1em; text-align: left; cursor: pointer; transition: border-color 0.3s;">SEARCH COLLECTION...</button>
-          <div id="search-input-container" class="search-input-container" style="display: none; position: absolute; top: 0; left: 0; right: 0; z-index: 20;">
-            <input type="text" id="search-query-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off" style="width: 100%; padding: 12px 40px 12px 20px; background-color: #000; border: 1px solid var(--zinc-800); color: #fff; font-family: var(--font-zalando-sans); font-size: 11px; outline: none;">
-            <button id="search-close-btn" type="button" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--zinc-500); font-size: 18px; cursor: pointer; padding: 4px 8px;">&times;</button>
+      <div class="col-search-wrapper">
+        <div class="col-search-inner">
+          <button id="col-search-trigger" type="button" class="col-search-trigger">SEARCH COLLECTION...</button>
+          <div id="col-search-input-container" class="col-search-input-container">
+            <input type="text" id="col-search-query-input" class="col-search-input" placeholder="SEARCH STYLE OR CODE..." autocomplete="off">
+            <button id="col-search-close-btn" type="button" class="col-search-close">&times;</button>
           </div>
-          <div id="search-results-dropdown" class="search-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background-color: #000; border: 1px solid var(--zinc-800); border-top: none; z-index: 30; max-height: 400px; overflow-y: auto;"></div>
+          <div id="col-search-results-dropdown" class="col-search-dropdown"></div>
         </div>
       </div>
 
@@ -446,15 +446,116 @@ require_once __DIR__ . '/auth.php';
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
     }
+    
+    /* Collections Search Bar - matching blog search style */
+    .col-search-wrapper {
+      max-width: 1200px;
+      margin: 0 auto 24px auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 10;
+    }
+    .col-search-inner {
+      position: relative;
+      width: 100%;
+    }
+    .col-search-trigger {
+      width: 100%;
+      padding: 16px 20px 16px 48px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--zinc-600);
+      color: var(--zinc-500);
+      font-family: var(--font-zalando-sans);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      backdrop-filter: blur(4px);
+      position: relative;
+    }
+    .col-search-trigger:hover {
+      border-color: var(--zinc-400);
+    }
+    .col-search-trigger::before {
+      content: "🔍";
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .col-search-input-container {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+    }
+    .col-search-input {
+      width: 100%;
+      padding: 16px 40px 16px 48px;
+      background-color: rgba(0, 0, 0, 0.9);
+      border: 1px solid var(--zinc-600);
+      color: #fff;
+      font-family: var(--font-zalando-sans);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      backdrop-filter: blur(4px);
+    }
+    .col-search-input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+    }
+    .col-search-input::placeholder {
+      color: var(--zinc-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .col-search-close {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--zinc-500);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 4px 8px;
+      z-index: 21;
+    }
+    .col-search-close:hover {
+      color: #fff;
+    }
+    .col-search-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      border: 1px solid var(--zinc-800);
+      border-top: none;
+      z-index: 30;
+      max-height: 400px;
+      overflow-y: auto;
+    }
   </style>
 
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const searchTrigger = document.getElementById('search-trigger');
-    const searchContainer = document.getElementById('search-input-container');
-    const searchQueryInput = document.getElementById('search-query-input');
-    const searchCloseBtn = document.getElementById('search-close-btn');
-    const searchDropdown = document.getElementById('search-results-dropdown');
+    const searchTrigger = document.getElementById('col-search-trigger');
+    const searchContainer = document.getElementById('col-search-input-container');
+    const searchQueryInput = document.getElementById('col-search-query-input');
+    const searchCloseBtn = document.getElementById('col-search-close-btn');
+    const searchDropdown = document.getElementById('col-search-results-dropdown');
 
     const productsData = [
       { id: "01", name: "DESIGN 01", collection: "RAWCODE", items: ["HIGH NECK TOP (RC/T-005)", "BAGGY JEANS (RC/P-003)"], desc: "A striking combination of high-collar structuring and loose utility jeans featuring detailed hand-painted metallic coatings." },
@@ -502,7 +603,7 @@ require_once __DIR__ . '/auth.php';
     searchCloseBtn.addEventListener('click', closeSearch);
 
     document.addEventListener('click', (e) => {
-      const wrapper = document.querySelector('.search-collections-wrapper');
+      const wrapper = document.querySelector('.col-search-wrapper');
       if (!wrapper.contains(e.target) && searchContainer.style.display === 'block') {
         closeSearch();
       }
